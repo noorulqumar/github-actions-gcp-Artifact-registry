@@ -30,6 +30,8 @@ jobs:
         export_default_credentials: true
 
     - name: build and push the docker image to artifact registry
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
       run: |
         gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
         docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest .

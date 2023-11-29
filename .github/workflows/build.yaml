@@ -34,7 +34,7 @@ jobs:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
         SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
       run: |
-        gcloud auth configure-docker us-east1-docker.pkg.dev
+        gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
         gcloud auth activate-service-account --key-file=$SERVICE_ACCOUNT_KEY 
         docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest .
         docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest

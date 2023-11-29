@@ -18,6 +18,10 @@ jobs:
       run: |
         sudo apt update
         sudo snap install google-cloud-sdk --classic
+    - name: iCheck gcloud cli Version
+      run: |
+        gcloud --version
+
 
     # - name: install the gcloud cli
     #   uses: google-github-actions/setup-gcloud@v0

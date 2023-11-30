@@ -16,11 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Google Cloud SDK
+      - name: install the gcloud cli
         run: |
-          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-360.0.0-linux-x86_64.tar.gz
-          tar zxvf google-cloud-sdk-360.0.0-linux-x86_64.tar.gz
-          ./google-cloud-sdk/install.sh
+          sudo apt update
+          sudo snap install google-cloud-sdk --classic
 
       - name: Authenticate Google Cloud SDK
         run: |

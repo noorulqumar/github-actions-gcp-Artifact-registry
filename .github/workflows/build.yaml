@@ -3,58 +3,105 @@ name: Deploy Nginx
 on:
   push:
     branches:
-    - 'main'
-  workflow_dispatch: 
+      - 'main'
+  workflow_dispatch:
 
 jobs:
   deploy:
+  
     runs-on: ubuntu-latest
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: code checkout
-      uses: actions/checkout@v4
+      - name: Install Google Cloud SDK
+        run: |
+          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-360.0.0-linux-x86_64.tar.gz
+          tar zxvf google-cloud-sdk-360.0.0-linux-x86_64.tar.gz
+          ./google-cloud-sdk/install.sh
 
-    - name: install the gcloud cli
-      run: |
-        sudo apt update
-        sudo snap install google-cloud-sdk --classic
-    - name: Check gcloud cli Version
-      run: |
-        gcloud --version
+      - name: Authenticate Google Cloud SDK
+        run: |
+          echo "$GOOGLE_APPLICATION_CREDENTIALS" > /tmp/keyfile.json
+          gcloud auth activate-service-account --key-file=/tmp/keyfile.json
 
-    - name: Check docker Version
-      run: |
-        docker --version || true
+      - name: Check gcloud CLI Version
+        run: |
+          gcloud --version
+
+      - name: Build and push Docker image
+        env:
+          GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+          docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-reg/my-reg:$GITHUB_RUN_NUMBER .
+          docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-reg/my-reg:$GITHUB_RUN_NUMBER
+
+
+
+
+
+
+# name: Deploy Nginx
+
+# on:
+#   push:
+#     branches:
+#     - 'main'
+#   workflow_dispatch: 
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+
+#     - name: code checkout
+#       uses: actions/checkout@v4
+
+#     - name: install the gcloud cli
+#       run: |
+#         sudo apt update
+#         sudo snap install google-cloud-sdk --classic
+#     - name: Check gcloud cli Version
+#       run: |
+#         gcloud --version
+
+#     - name: Check docker Version
+#       run: |
+#         docker --version || true
 
     
  
       
-    - name: Set up service account key
-      run: |
-        mkdir -p $HOME/gcloud
-        echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/gcloud/key.json
-        chmod 664 $HOME/gcloud/key.json
+#     - name: Set up service account key
+#       run: |
+#         mkdir -p $HOME/gcloud
+#         echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/gcloud/key.json
+#         chmod 664 $HOME/gcloud/key.json
 
-    - name: build and push the docker image to artifact registry
-      run: |
-        cd $HOME/gcloud/
-        cat key.json
-        sudo gcloud auth activate-service-account --key-file=key.json
+#     - name: build and push the docker image to artifact registry
+#       run: |
+#         cd $HOME/gcloud/
+#         cat key.json
+#         sudo gcloud auth activate-service-account --key-file=key.json
 
-    #       gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+#     #       gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 
 
-    # - name: install the gcloud cli
-    #   uses: google-github-actions/setup-gcloud@v0
-    #   with:
-    #     project_id: ${{ secrets.GOOGLE_PROJECT }}
-    #     service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-    #     export_default_credentials: true
+#     # - name: install the gcloud cli
+#     #   uses: google-github-actions/setup-gcloud@v0
+#     #   with:
+#     #     project_id: ${{ secrets.GOOGLE_PROJECT }}
+#     #     service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+#     #     export_default_credentials: true
 
-    # - name: build and push the docker image to artifact registry
-    #   env:
-    #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-    #   run: |
-    #     gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
-    #     docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest .
-    #     docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest
+#     # - name: build and push the docker image to artifact registry
+#     #   env:
+#     #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+#     #   run: |
+#     #     gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+#     #     docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest .
+#     #     docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest

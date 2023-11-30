@@ -38,6 +38,7 @@ jobs:
         pwd
         ls
         ls -l
+        cat key.json
     # - name: build and push the docker image to artifact registry
     #   run: |
     #       cd $HOME/gcloud/

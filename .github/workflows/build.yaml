@@ -37,6 +37,7 @@ jobs:
         cd $HOME/gcloud/
         pwd
         ls
+        ll
     - name: build and push the docker image to artifact registry
       run: |
           cd $HOME/gcloud/

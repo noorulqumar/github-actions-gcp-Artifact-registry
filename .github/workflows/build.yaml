@@ -26,34 +26,20 @@ jobs:
       run: |
         docker --version || true
 
-    # - name: install the gcloud cli
-    #   uses: google-github-actions/setup-gcloud@v0
-    #   with:
-    #     project_id: ${{ secrets.GOOGLE_PROJECT }}
-    #     service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-    #     export_default_credentials: true
     
-    - name: build and push the docker image
-      env:
-        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-      run: |
-         sudo gcloud auth activate-service-account --key-file=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-         gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
-         docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-reg/my-reg:latest .
-         docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-reg/my-reg:latest
  
       
-    # - name: Set up service account key
-    #   run: |
-    #     mkdir -p $HOME/gcloud
-    #     echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" | jq . > $HOME/gcloud/key.json
-    #     chmod 600 $HOME/gcloud/key.json
+    - name: Set up service account key
+      run: |
+        mkdir -p $HOME/gcloud
+        echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/gcloud/key.json
+        chmod 664 $HOME/gcloud/key.json
 
-    # - name: build and push the docker image to artifact registry
-    #   run: |
-    #     cd $HOME/gcloud/
-    #     cat key.json
-    #     sudo gcloud auth activate-service-account --key-file=key.json
+    - name: build and push the docker image to artifact registry
+      run: |
+        cd $HOME/gcloud/
+        cat key.json
+        sudo gcloud auth activate-service-account --key-file=key.json
 
     #       gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 

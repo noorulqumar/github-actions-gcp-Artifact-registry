@@ -33,7 +33,15 @@ jobs:
         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         export_default_credentials: true
 
-        
+    - name: build and push the docker image
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+      run: |
+         gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+         docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-reg/my-reg:latest .
+         docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-reg/my-reg:latest
+ 
+      
     # - name: Set up service account key
     #   run: |
     #     mkdir -p $HOME/gcloud

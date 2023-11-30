@@ -44,7 +44,7 @@ jobs:
       run: |
           cd $HOME/gcloud/
           cat key.json
-    #       gcloud auth activate-service-account --key-file=key.json
+          gcloud auth activate-service-account --key-file=key.json
     #       gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 
 

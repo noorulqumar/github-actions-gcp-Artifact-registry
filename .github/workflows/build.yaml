@@ -14,25 +14,25 @@ jobs:
     - name: code checkout
       uses: actions/checkout@v2
 
-    # - name: install the gcloud cli
-    #   run: |
-    #     sudo apt update
-    #     sudo snap install google-cloud-sdk --classic
-    # - name: iCheck gcloud cli Version
-    #   run: |
-    #     gcloud --version
-
     - name: install the gcloud cli
-      uses: google-github-actions/setup-gcloud@v0
-      with:
-        project_id: ${{ secrets.GOOGLE_PROJECT }}
-        service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-        export_default_credentials: true
-
-    - name: build and push the docker image to artifact registry
-      env:
-        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
       run: |
-        gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
-        docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest .
-        docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest
+        sudo apt update
+        sudo snap install google-cloud-sdk --classic
+    - name: iCheck gcloud cli Version
+      run: |
+        gcloud --version
+
+    # - name: install the gcloud cli
+    #   uses: google-github-actions/setup-gcloud@v0
+    #   with:
+    #     project_id: ${{ secrets.GOOGLE_PROJECT }}
+    #     service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+    #     export_default_credentials: true
+
+    # - name: build and push the docker image to artifact registry
+    #   env:
+    #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+    #   run: |
+    #     gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+    #     docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest .
+    #     docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT/my-repo/my-repo:latest

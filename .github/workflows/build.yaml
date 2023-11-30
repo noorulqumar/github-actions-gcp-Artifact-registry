@@ -29,9 +29,7 @@ jobs:
     - name: Set up service account key
       run: |
         mkdir -p $HOME/gcloud
-        echo "{" >> $HOME/gcloud/key.json
-        echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" >> $HOME/gcloud/key.json
-        echo "}" >> $HOME/gcloud/key.json
+        echo ${{ secrets.SERVICE_ACCOUNT_KEY }} >> $HOME/gcloud/key.json
         chmod 664 $HOME/gcloud/key.json
 
     - name: Set up service account key
@@ -41,11 +39,11 @@ jobs:
         ls
         ls -l
         cat key.json
-    - name: build and push the docker image to artifact registry
-      run: |
-          cd $HOME/gcloud/
-          cat key.json
-          gcloud auth activate-service-account --key-file=key.json
+    # - name: build and push the docker image to artifact registry
+    #   run: |
+    #       cd $HOME/gcloud/
+    #       cat key.json
+    #       gcloud auth activate-service-account --key-file=key.json
     #       gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 
 

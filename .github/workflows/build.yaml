@@ -30,8 +30,7 @@ jobs:
       env:
          S_A_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY_1 }}
       run: |
-        cat $S_A_KEY
-        # gcloud auth activate-service-account --key-file=$S_A_KEY
+          gcloud auth activate-service-account --key-file=${{ secrets.SERVICE_ACCOUNT_KEY_1 }}
         # gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 
 

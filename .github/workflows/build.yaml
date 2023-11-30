@@ -31,11 +31,10 @@ jobs:
         mkdir -p $HOME/gcloud
         echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > $HOME/gcloud/key.json
         chmod 600 $HOME/gcloud/key.json
-        pwd
-        ls
 
     - name: Set up service account key
       run: |
+        cd $HOME/gcloud/
         pwd
     # - name: build and push the docker image to artifact registry
     #   run: |

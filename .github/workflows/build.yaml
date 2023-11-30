@@ -26,18 +26,21 @@ jobs:
       run: |
         docker --version || true
 
+    - id: "auth"
+      uses: "google-github-actions/auth@v1"
+      with:
+            credentials_json: "${{ secrets.SERVICE_ACCOUNT_KEY }}"
+    # - name: Set up service account key
+    #   run: |
+    #     mkdir -p $HOME/gcloud
+    #     echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" | jq . > $HOME/gcloud/key.json
+    #     chmod 600 $HOME/gcloud/key.json
 
-    - name: Set up service account key
-      run: |
-        mkdir -p $HOME/gcloud
-        echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" | jq . > $HOME/gcloud/key.json
-        chmod 600 $HOME/gcloud/key.json
-
-    - name: build and push the docker image to artifact registry
-      run: |
-        cd $HOME/gcloud/
-        cat key.json
-        sudo gcloud auth activate-service-account --key-file=key.json
+    # - name: build and push the docker image to artifact registry
+    #   run: |
+    #     cd $HOME/gcloud/
+    #     cat key.json
+    #     sudo gcloud auth activate-service-account --key-file=key.json
 
     #       gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 

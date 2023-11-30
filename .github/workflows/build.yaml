@@ -32,6 +32,9 @@ jobs:
         echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > $HOME/gcloud/key.json
         chmod 600 $HOME/gcloud/key.json
 
+    - name: Set up service account key
+      run: |
+        pwd
     # - name: build and push the docker image to artifact registry
     #   run: |
     #       gcloud auth activate-service-account --key-file=${{ secrets.SERVICE_ACCOUNT_KEY_1 }}

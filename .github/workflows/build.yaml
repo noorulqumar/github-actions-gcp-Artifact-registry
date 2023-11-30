@@ -25,9 +25,8 @@ jobs:
 
       - name: Set up service account key
         run: |
-          # mkdir -p $HOME/gcloud
           echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" | jq . > key.json
-          # chmod 664 $HOME/gcloud/key.json
+
 
 
 

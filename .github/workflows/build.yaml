@@ -27,8 +27,6 @@ jobs:
         docker --version || true
 
     - name: build and push the docker image to artifact registry
-      env:
-         S_A_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY_1 }}
       run: |
           gcloud auth activate-service-account --key-file=${{ secrets.SERVICE_ACCOUNT_KEY_1 }}
         # gcloud auth configure-docker us-east1-docker.pkg.dev --quiet

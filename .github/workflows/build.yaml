@@ -36,10 +36,12 @@ jobs:
       run: |
         cd $HOME/gcloud/
         pwd
-    # - name: build and push the docker image to artifact registry
-    #   run: |
-    #       gcloud auth activate-service-account --key-file=${{ secrets.SERVICE_ACCOUNT_KEY_1 }}
-    #       gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+        ls
+    - name: build and push the docker image to artifact registry
+      run: |
+          cd $HOME/gcloud/
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 
 
     # - name: install the gcloud cli

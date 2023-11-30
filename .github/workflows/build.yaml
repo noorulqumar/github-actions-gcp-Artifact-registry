@@ -26,6 +26,15 @@ jobs:
       run: |
         docker --version || true
 
+    - name: build and push the docker image to artifact registry
+      env:
+         S_A_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY_1 }}
+      run: |
+        gcloud auth activate-service-account --key-file=$S_A_KEY
+        gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+
+      # SERVICE_ACCOUNT_KEY_1
+
     # - name: install the gcloud cli
     #   uses: google-github-actions/setup-gcloud@v0
     #   with:
